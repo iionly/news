@@ -1,6 +1,6 @@
 News plugin for Elgg 1.9
-Latest Version: 1.9.0
-Released: 2014-04-26
+Latest Version: 1.9.1
+Released: 2014-05-21
 Contact: iionly@gmx.de
 License: GNU General Public License version 2
 Copyright: (c) iionly
@@ -20,6 +20,15 @@ Installation:
 
 
 Changelog:
+
+1.9.1:
+
+- Updated version 1.8.1 for Elgg 1.9.
+
+1.8.1:
+
+- Allow group admins (as defined by the use of the group_tools plugin) to add/edit group news,
+- New widget for profile pages, dashboard and index page that displays the latest news in groups using a slider (originally from the Group Tools plugin).
 
 1.9.0:
 

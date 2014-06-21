@@ -70,5 +70,16 @@ View and comment on the news post:
 
 	// widgets
 	'news:widget:description' => 'This widget lists the most recent news.',
-	'news:numbertodisplay' => 'Number of news to display'
+	'news:numbertodisplay' => 'Number of news to display',
+
+	"news:news_in_groups:title" => "News in Groups",
+	"news:news_in_groups:description" => "Shows latest news from various groups.",
+	"news:news_in_groups:no_projects" => "No groups configured yet.",
+	"news:news_in_groups:no_news" => "No news for this group.",
+	"news:news_in_groups:settings:project" => "Group",
+	"news:news_in_groups:settings:no_project" => "Select a group",
+	"news:news_in_groups:settings:news_count" => "Max number of news",
+	"news:news_in_groups:settings:group_icon_size" => "Group icon size",
+	"news:news_in_groups:settings:group_icon_size:small" => "Small",
+	"news:news_in_groups:settings:group_icon_size:medium" => "Medium"
 );

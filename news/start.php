@@ -48,6 +48,11 @@ function news_init() {
 	add_group_tool_option('news', elgg_echo('news:enablenews'), true);
 	elgg_extend_view('groups/tool_latest', 'news/group_module');
 
+	// add news in groups widget
+	elgg_register_widget_type("news_in_groups", elgg_echo("news:news_in_groups:title"), elgg_echo("news:news_in_groups:description"), array("profile","index","dashboard"), true);
+	elgg_extend_view("css/elgg", "widgets/news_in_groups/css");
+	elgg_extend_view("js/elgg", "widgets/news_in_groups/js");
+
 	if (elgg_is_active_plugin('widget_manager')) {
 		//add index widget for Widget Manager plugin
 		elgg_register_widget_type('index_news', elgg_echo("news:news"), elgg_echo('news:widget:description'), array("index"));
@@ -130,7 +135,7 @@ function news_page_handler($page) {
 			elgg_gatekeeper();
 			$current_user_guid = elgg_get_logged_in_user_guid();
 			$container = get_entity($page[1]);
-			if (((elgg_instanceof($container, 'group')) && ($current_user_guid == $container->owner_guid)) || elgg_is_admin_logged_in()) {
+			if (((elgg_instanceof($container, 'group')) && (($current_user_guid == $container->owner_guid) || (check_entity_relationship($current_user_guid, "group_admin", $container->guid)))) || elgg_is_admin_logged_in()) {
 				$params = news_get_page_content_edit($page_type, $page[1]);
 			} else {
 				forward(REFERER);
@@ -202,7 +207,7 @@ function news_owner_block_menu($hook, $type, $return, $params) {
 		$item = new ElggMenuItem('news', elgg_echo('news'), $url);
 		$return[] = $item;
 	} else {
-		if (($params['entity']->news_enable != "no") && ((elgg_get_logged_in_user_guid() == $params['entity']->owner_guid) || elgg_is_admin_logged_in)) {
+		if (($params['entity']->news_enable != "no") && (((elgg_get_logged_in_user_guid() == $params['entity']->owner_guid) || (check_entity_relationship(elgg_get_logged_in_user_guid(), "group_admin", $params['entity']->guid))) || elgg_is_admin_logged_in)) {
 			$url = "news/group/{$params['entity']->guid}/all";
 			$item = new ElggMenuItem('news', elgg_echo('news:group'), $url);
 			$return[] = $item;

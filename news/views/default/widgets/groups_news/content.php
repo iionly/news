@@ -33,7 +33,7 @@ if (!$content) {
 $group = elgg_get_page_owner_entity();
 $current_user = elgg_get_logged_in_user_entity();
 
-if (($current_user->guid == $group->owner_guid) || ($current_user->isAdmin())) {
+if (($current_user->isAdmin()) || (($current_user->guid == $group->owner_guid) || (check_entity_relationship($current_user->guid, "group_admin", $group->guid)))) {
 	$content .= elgg_view('output/url', array(
 		'href' => "news/add/$container_guid",
 		'text' => elgg_echo('news:write'),

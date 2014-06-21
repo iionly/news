@@ -70,5 +70,16 @@ Schau Dir die Neuigkeit an und schreibe einen Kommentar:
 
 	// widgets
 	'news:widget:description' => 'Dieses Widget zeigt die letzten Neuigkeiten an.',
-	'news:numbertodisplay' => 'Anzahl der anzuzeigenden Neuigkeiten'
+	'news:numbertodisplay' => 'Anzahl der anzuzeigenden Neuigkeiten',
+
+	"news:news_in_groups:title" => "Gruppen-Neugigkeiten",
+	"news:news_in_groups:description" => "Zeige die letzten Neuigkeiten aus verschiedenen Gruppen an.",
+	"news:news_in_groups:no_projects" => "Es wurden noch keine Gruppen konfiguriert.",
+	"news:news_in_groups:no_news" => "In dieser Gruppe wurden noch keine Neuigkeiten veröffentlicht.",
+	"news:news_in_groups:settings:project" => "Gruppe",
+	"news:news_in_groups:settings:no_project" => "Wähle eine Gruppe",
+	"news:news_in_groups:settings:news_count" => "Maximale Anzahl von Neuigkeiten",
+	"news:news_in_groups:settings:group_icon_size" => "Größe des Gruppen-Icons",
+	"news:news_in_groups:settings:group_icon_size:small" => "Klein",
+	"news:news_in_groups:settings:group_icon_size:medium" => "Mittel"
 );

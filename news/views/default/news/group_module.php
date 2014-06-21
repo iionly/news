@@ -32,7 +32,7 @@ if (!$content) {
 	$content = '<p>' . elgg_echo('news:none') . '</p>';
 }
 
-if (($current_user->guid == $group->owner_guid) || ($current_user->isAdmin())) {
+if (($current_user->isAdmin()) || (($current_user->guid == $group->owner_guid) || (check_entity_relationship($current_user->guid, "group_admin", $group->guid)))) {
 	$new_link = elgg_view('output/url', array(
 		'href' => "news/add/$group->guid",
 		'text' => elgg_echo('news:write'),

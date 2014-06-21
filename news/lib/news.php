@@ -97,7 +97,7 @@ function news_get_page_content_list($container_guid = null) {
 		elgg_push_breadcrumb(elgg_echo('news:news'));
 	}
 
-	if (elgg_is_admin_logged_in() || ($container_guid && (elgg_instanceof($container, 'group')) && ($container->owner_guid == $current_user->guid))) {
+	if (elgg_is_admin_logged_in() || ($container_guid && (elgg_instanceof($container, 'group')) && (($container->owner_guid == $current_user->guid) || (check_entity_relationship($current_user->guid, "group_admin", $container->guid))))) {
 		elgg_register_title_button();
 	}
 
