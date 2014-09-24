@@ -61,7 +61,7 @@ function news_init() {
 		elgg_register_widget_type('groups_news', elgg_echo("news:news"), elgg_echo('news:widget:description'), array("groups"));
 
 		//register title urls for widgets
-		elgg_register_plugin_hook_handler('widget_url', 'widget_manager', "news_widget_urls", 499);
+		elgg_register_plugin_hook_handler("entity:url", "object", "news_widget_urls");
 	}
 
 	// register actions
