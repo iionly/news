@@ -5,6 +5,9 @@
  * originally from the Group Tools plugin and modified for the News plugin
  *
  */
+
+elgg_require_js('elgg/news/news_in_groups');
+
 $widget = $vars["entity"];
 
 $configured_projects = array();
@@ -41,7 +44,8 @@ if (!empty($configured_projects)) {
 			"type" => "object",
 			"subtype" => "news",
 			"container_guid" => $group->getGUID(),
-			"limit" => $news_count
+			"limit" => $news_count,
+			"distinct" => false,
 		));
 		if (!empty($group_news)) {
 			$body .= "<ul>";

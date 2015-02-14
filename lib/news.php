@@ -64,6 +64,9 @@ function news_get_page_content_list($container_guid = null) {
 		'type' => 'object',
 		'subtype' => 'news',
 		'full_view' => false,
+		'no_results' => elgg_echo('news:none'),
+		'preload_owners' => true,
+		'distinct' => false,
 	);
 
 	$current_user = elgg_get_logged_in_user_entity();
@@ -101,12 +104,7 @@ function news_get_page_content_list($container_guid = null) {
 		elgg_register_title_button();
 	}
 
-	$list = elgg_list_entities($options);
-	if (!$list) {
-		$return['content'] = elgg_echo('news:none');
-	} else {
-		$return['content'] = $list;
-	}
+	$return['content'] = elgg_list_entities($options);
 
 	return $return;
 }
@@ -145,6 +143,9 @@ function news_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
 		'type' => 'object',
 		'subtype' => 'news',
 		'full_view' => false,
+		'no_results' => elgg_echo('news:none'),
+		'preload_owners' => true,
+		'distinct' => false,
 	);
 
 	if ($owner_guid) {
@@ -159,12 +160,7 @@ function news_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
 		$options['created_time_upper'] = $upper;
 	}
 
-	$list = elgg_list_entities_from_metadata($options);
-	if (!$list) {
-		$content = elgg_echo('news:none');
-	} else {
-		$content = $list;
-	}
+	$content = elgg_list_entities($options);
 
 	$title = elgg_echo('date:month:' . date('m', $lower), array(date('Y', $lower)));
 
@@ -185,7 +181,7 @@ function news_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
  */
 function news_get_page_content_edit($page, $guid = 0, $revision = null) {
 
-	elgg_load_js('elgg.news');
+	elgg_require_js('elgg/news/save_draft');
 
 	$return = array(
 		'filter' => '',
@@ -224,7 +220,7 @@ function news_get_page_content_edit($page, $guid = 0, $revision = null) {
 			elgg_push_breadcrumb($news->title, $news->getURL());
 			elgg_push_breadcrumb(elgg_echo('edit'));
 
-			elgg_load_js('elgg.news');
+			elgg_require_js('elgg/news/save_draft');
 
 			$content = elgg_view_form('news/save', $vars, $body_vars);
 			$sidebar = elgg_view('news/sidebar/revisions', $vars);

@@ -22,13 +22,11 @@ $options = array(
 	'limit' => $count,
 	'full_view' => false,
 	'pagination' => false,
+	'no_results' => elgg_echo('news:none'),
+	'distinct' => false,
 );
 $content = elgg_list_entities($options);
 elgg_pop_context();
-
-if (!$content) {
-	$content = '<p>' . elgg_echo('news:none') . '</p>';
-}
 
 $group = elgg_get_page_owner_entity();
 $current_user = elgg_get_logged_in_user_entity();

@@ -24,13 +24,11 @@ $options = array(
 	'limit' => 4,
 	'full_view' => false,
 	'pagination' => false,
+	'no_results' => elgg_echo('news:none'),
+	'distinct' => false,
 );
 $content = elgg_list_entities($options);
 elgg_pop_context();
-
-if (!$content) {
-	$content = '<p>' . elgg_echo('news:none') . '</p>';
-}
 
 if (elgg_is_logged_in() && (($current_user->isAdmin()) || (($current_user->guid == $group->owner_guid) || (check_entity_relationship($current_user->guid, "group_admin", $group->guid))))) {
 	$new_link = elgg_view('output/url', array(

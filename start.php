@@ -24,10 +24,6 @@ function news_init() {
 	// add to the main css
 	elgg_extend_view('css/elgg', 'news/css');
 
-	// register the news's JavaScript
-	$news_js = elgg_get_simplecache_url('js', 'news/save_draft');
-	elgg_register_js('elgg.news', $news_js);
-
 	// routing of urls
 	elgg_register_page_handler('news', 'news_page_handler');
 
@@ -50,8 +46,6 @@ function news_init() {
 
 	// add news in groups widget
 	elgg_register_widget_type("news_in_groups", elgg_echo("news:news_in_groups:title"), elgg_echo("news:news_in_groups:description"), array("profile","index","dashboard"), true);
-	elgg_extend_view("css/elgg", "widgets/news_in_groups/css");
-	elgg_extend_view("js/elgg", "widgets/news_in_groups/js");
 
 	if (elgg_is_active_plugin('widget_manager')) {
 		//add index widget for Widget Manager plugin
@@ -257,9 +251,9 @@ function news_entity_menu_setup($hook, $type, $return, $params) {
  *
  * @param string                          $hook         Hook name
  * @param string                          $type         Hook type
- * @param Elgg_Notifications_Notification $notification The notification to prepare
+ * @param Elgg\Notifications\Notification $notification The notification to prepare
  * @param array                           $params       Hook parameters
- * @return Elgg_Notifications_Notification
+ * @return Elgg\Notifications\Notification
  */
 function news_prepare_notification($hook, $type, $notification, $params) {
 

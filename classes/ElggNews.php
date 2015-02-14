@@ -41,7 +41,7 @@ class ElggNews extends ElggObject {
 
 	/**
 	 * Get the excerpt for this news post
-	 * 
+	 *
 	 * @param int $length Length of the excerpt (optional)
 	 * @return string
 	 * @since 1.9.0

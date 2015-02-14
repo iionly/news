@@ -1,6 +1,6 @@
-News plugin for Elgg 1.9
-Latest Version: 1.9.2
-Released: 2014-09-24
+News plugin for Elgg 1.10
+Latest Version: 1.10.3
+Released: 2015-02-14
 Contact: iionly@gmx.de
 License: GNU General Public License version 2
 Copyright: (c) iionly
@@ -15,11 +15,18 @@ This News plugin might also be able to replace other former News plugins as long
 
 Installation:
 
+(0. If you have a previous version of the news plugin installed, disable the plugin on your site and remove the news plugin folder from your mod directory completely before installing the new version,)
 1. Copy the news plugin folder into you mod folder,
 2. Enable the News plugin in the admin section of your site.
 
 
 Changelog:
+
+1.10.3:
+
+- Updated for Elgg 1.10,
+- Fixing of deprecation issues,
+- Register JS as AMD module.
 
 1.9.2:
 

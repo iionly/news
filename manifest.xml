@@ -3,16 +3,16 @@
 	<name>News</name>
 	<id>news</id>
 	<author>iionly / Core developers</author>
-	<version>1.9.2</version>
+	<version>1.10.3</version>
 	<category>content</category>
 	<category>communication</category>
 	<description>The news plugin allows admins and group owners to write announcements / news.</description>
 	<website>https://github.com/iionly</website>
-	<copyright>(c) iionly 2014</copyright>
+	<copyright>(c) iionly 2014-2015</copyright>
 	<license>GNU General Public License version 2</license>
 	<requires>
 		<type>elgg_release</type>
-		<version>1.9</version>
+		<version>1.10.0</version>
 	</requires>
 	<suggests>
 		<type>plugin</type>

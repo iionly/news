@@ -48,7 +48,7 @@ if ($title && $description) {
 		}
 	}
 
-	// creat draft annotation
+	// create draft annotation
 	if (!$error) {
 		// annotations don't have a "time_updated" so
 		// we have to delete everything or the times are wrong.

@@ -3,7 +3,11 @@
  * News river view.
  */
 
-$object = $vars['item']->getObjectEntity();
+$item = $vars['item'];
+/* @var ElggRiverItem $item */
+
+$object = $item->getObjectEntity();
+
 $excerpt = $object->excerpt ? $object->excerpt : $object->description;
 $excerpt = strip_tags($excerpt);
 $excerpt = elgg_get_excerpt($excerpt);

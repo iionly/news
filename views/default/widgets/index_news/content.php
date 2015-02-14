@@ -19,12 +19,10 @@ $options = array(
 	'limit' => $count,
 	'full_view' => false,
 	'pagination' => false,
+	'no_results' => elgg_echo('news:none'),
+	'distinct' => false,
 );
 $content = elgg_list_entities($options);
 elgg_pop_context();
 
-if ($content) {
-	echo $content;
-} else {
-	echo '<p>' . elgg_echo('news:none') . '</p>';
-}
+echo $content;

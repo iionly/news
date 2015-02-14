@@ -23,7 +23,6 @@ if (elgg_instanceof($news, 'object', 'news') && $news->canEdit()) {
 	// count(false) == 1!  AHHH!!!
 	$saved_revisions = $news->getAnnotations(array(
 		'annotation_name' => 'news_revision',
-		'limit' => 10,
 		'reverse_order_by' => true,
 	));
 	if ($saved_revisions) {
