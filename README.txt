@@ -1,6 +1,6 @@
-News plugin for Elgg 1.10
-Latest Version: 1.10.3
-Released: 2015-02-14
+News plugin for Elgg 1.11
+Latest Version: 1.11.4
+Released: 2015-05-16
 Contact: iionly@gmx.de
 License: GNU General Public License version 2
 Copyright: (c) iionly
@@ -21,6 +21,11 @@ Installation:
 
 
 Changelog:
+
+1.11.4:
+
+- Updated to correspond to the code of the bundled Blog plugin (=the foundation of News plugin) of Elgg 1.11.1,
+- Spanish translations added (thanks to Francisco).
 
 1.10.3:
 

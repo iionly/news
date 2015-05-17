@@ -94,6 +94,7 @@ function news_get_page_content_list($container_guid = null) {
 			$return['filter_context'] = 'none';
 		}
 	} else {
+		$options['preload_containers'] = true;
 		$return['filter_context'] = 'all';
 		$return['title'] = elgg_echo('news:title:all_news');
 		elgg_pop_breadcrumb();
