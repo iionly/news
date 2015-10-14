@@ -21,17 +21,13 @@ if (!$excerpt) {
 }
 
 if (elgg_instanceof($container, 'group')) {
-	$owner_icon = '<a href="'.elgg_get_site_url().'news/group/'.$container->guid.'/all"><img src="'.elgg_get_site_url().'mod/news/graphics/news.gif"></a>';
+	$owner_icon = '<a href="'.elgg_get_site_url().'news/group/'.$container->guid.'/all"><img src="' . elgg_get_simplecache_url('news/news.gif') . '"></a>';
 } else {
-	$owner_icon = '<a href="'.elgg_get_site_url().'news/all"><img src="'.elgg_get_site_url().'mod/news/graphics/news.gif"></a>';
+	$owner_icon = '<a href="'.elgg_get_site_url().'news/all"><img src="' . elgg_get_simplecache_url('news/news.gif') . '"></a>';
 }
-$owner_link = elgg_view('output/url', array(
-	'href' => "news/owner/$owner->username",
-	'text' => $owner->name,
-	'is_trusted' => true,
-));
-$author_text = elgg_echo('byline', array($owner_link));
-$date = elgg_view_friendly_time($news->time_created);
+
+$vars['owner_url'] = "news/owner/$owner->username";
+$by_line = elgg_view('page/elements/by_line', $vars);
 
 // The "on" status changes for comments, so best to check for !Off
 if ($news->comments_on != 'Off') {
@@ -51,18 +47,17 @@ if ($news->comments_on != 'Off') {
 	$comments_link = '';
 }
 
-$metadata = elgg_view_menu('entity', array(
-	'entity' => $vars['entity'],
-	'handler' => 'news',
-	'sort_by' => 'priority',
-	'class' => 'elgg-menu-hz',
-));
+$subtitle = "$by_line $comments_link $categories";
 
-$subtitle = "$author_text $date $comments_link $categories";
-
-// do not show the metadata and controls in widget view
-if (elgg_in_context('widgets')) {
-	$metadata = '';
+$metadata = '';
+if (!elgg_in_context('widgets')) {
+	// only show entity menu outside of widgets
+	$metadata = elgg_view_menu('entity', array(
+		'entity' => $vars['entity'],
+		'handler' => 'news',
+		'sort_by' => 'priority',
+		'class' => 'elgg-menu-hz',
+	));
 }
 
 if ($full) {

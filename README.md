@@ -1,7 +1,7 @@
-News plugin for Elgg 1.11 + 1.12
-================================
+News plugin for Elgg 2.X
+========================
 
-Latest Version: 1.11.5  
+Latest Version: 2.0.0  
 Released: 2015-10-12  
 Contact: iionly@gmx.de  
 License: GNU General Public License version 2  

@@ -54,7 +54,7 @@ $excerpt_label = elgg_echo('news:excerpt');
 $excerpt_input = elgg_view('input/text', array(
 	'name' => 'excerpt',
 	'id' => 'news_excerpt',
-        'value' => _elgg_html_decode($vars['excerpt'])
+	'value' => elgg_html_decode($vars['excerpt'])
 ));
 
 $body_label = elgg_echo('news:body');

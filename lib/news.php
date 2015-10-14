@@ -5,48 +5,6 @@
  * @package News
  */
 
-
-/**
- * Get page components to view a news post.
- *
- * @param int $guid GUID of a news entity.
- * @return array
- */
-function news_get_page_content_read($guid = null) {
-
-	$return = array();
-
-	elgg_entity_gatekeeper($guid, 'object', 'news');
-
-	$news = get_entity($guid);
-
-	// no header or tabs for viewing an individual news
-	$return['filter'] = '';
-
-	elgg_set_page_owner_guid($news->container_guid);
-
-	elgg_group_gatekeeper();
-
-	$return['title'] = $news->title;
-
-	$container = $news->getContainerEntity();
-	$crumbs_title = $container->name;
-	if (elgg_instanceof($container, 'group')) {
-		elgg_push_breadcrumb($crumbs_title, "news/group/$container->guid/all");
-	} else {
-		elgg_push_breadcrumb($crumbs_title, "news/owner/$container->username");
-	}
-
-	elgg_push_breadcrumb($news->title);
-	$return['content'] = elgg_view_entity($news, array('full_view' => true));
-	// check to see if we should allow comments
-	if ($news->comments_on != 'Off' && $news->status == 'published') {
-		$return['content'] .= elgg_view_comments($news);
-	}
-
-	return $return;
-}
-
 /**
  * Get page components to list a user's or all news.
  *
@@ -75,10 +33,11 @@ function news_get_page_content_list($container_guid = null) {
 		// access check for closed groups
 		elgg_group_gatekeeper();
 
-		$options['container_guid'] = $container_guid;
 		$container = get_entity($container_guid);
-		if (!$container) {
-
+		if ($container instanceof ElggGroup) {
+		$options['container_guid'] = $container_guid;
+		} else {
+			$options['owner_guid'] = $container_guid;
 		}
 		$return['title'] = elgg_echo('news:title:user_news', array($container->name));
 
@@ -149,8 +108,10 @@ function news_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
 		'distinct' => false,
 	);
 
-	if ($owner_guid) {
+	if ($owner instanceof ElggGroup) {
 		$options['container_guid'] = $owner_guid;
+	} elseif ($owner instanceof ElggUser) {
+		$options['owner_guid'] = $owner_guid;
 	}
 
 	if ($lower) {
@@ -182,7 +143,7 @@ function news_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
  */
 function news_get_page_content_edit($page, $guid = 0, $revision = null) {
 
-	elgg_require_js('elgg/news/save_draft');
+	elgg_require_js('news/save_draft');
 
 	$return = array(
 		'filter' => '',
@@ -221,7 +182,7 @@ function news_get_page_content_edit($page, $guid = 0, $revision = null) {
 			elgg_push_breadcrumb($news->title, $news->getURL());
 			elgg_push_breadcrumb(elgg_echo('edit'));
 
-			elgg_require_js('elgg/news/save_draft');
+			elgg_require_js('news/save_draft');
 
 			$content = elgg_view_form('news/save', $vars, $body_vars);
 			$sidebar = elgg_view('news/sidebar/revisions', $vars);
@@ -308,7 +269,8 @@ function news_prepare_form_vars($post = null, $revision = null) {
 		$auto_save = false;
 	}
 
-	if ($auto_save && $auto_save->id != $revision->id) {
+	/* @var ElggAnnotation|false $auto_save */
+	if ($auto_save && $revision && $auto_save->id != $revision->id) {
 		$values['draft_warning'] = elgg_echo('news:messages:warning:draft');
 	}
 

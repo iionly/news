@@ -13,7 +13,7 @@ elgg_register_event_handler('init', 'system', 'news_init');
  */
 function news_init() {
 
-	elgg_register_library('elgg:news', elgg_get_plugins_path() . 'news/lib/news.php');
+	elgg_register_library('elgg:news', __DIR__ . '/lib/news.php');
 
 	// add a site navigation item
 	$item = new ElggMenuItem('news', elgg_echo('news:news'), 'news/all');
@@ -22,7 +22,7 @@ function news_init() {
 	elgg_register_event_handler('upgrade', 'upgrade', 'news_run_upgrades');
 
 	// add to the main css
-	elgg_extend_view('css/elgg', 'news/css');
+	elgg_extend_view('elgg.css', 'news/css');
 
 	// routing of urls
 	elgg_register_page_handler('news', 'news_page_handler');
@@ -59,7 +59,7 @@ function news_init() {
 	}
 
 	// register actions
-	$action_path = elgg_get_plugins_path() . 'news/actions/news';
+	$action_path = __DIR__ . '/actions/news';
 	elgg_register_action('news/save', "$action_path/save.php");
 	elgg_register_action('news/auto_save_revision', "$action_path/auto_save_revision.php");
 	elgg_register_action('news/delete', "$action_path/delete.php");
@@ -69,6 +69,9 @@ function news_init() {
 
 	// ecml
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'news_ecml_views_hook');
+
+	// allow news posts to be liked
+	elgg_register_plugin_hook_handler('likes:is_likable', 'object:news', 'Elgg\Values::getTrue');
 }
 
 /**
@@ -98,28 +101,25 @@ function news_page_handler($page) {
 	// push all news breadcrumb
 	elgg_push_breadcrumb(elgg_echo('news:news'), "news/all");
 
-	if (!isset($page[0])) {
-		$page[0] = 'all';
-	}
+	$page_type = elgg_extract(0, $page, 'all');
+	$resource_vars = [
+		'page_type' => $page_type,
+	];
 
-	$page_type = $page[0];
 	switch ($page_type) {
 		case 'owner':
-			$user = get_user_by_username($page[1]);
-			if (!$user) {
-				forward('', '404');
-			}
-			$params = news_get_page_content_list($user->guid);
+			$resource_vars['username'] = elgg_extract(1, $page);
+			echo elgg_view_resource('news/owner', $resource_vars);
 			break;
 		case 'archive':
-			$user = get_user_by_username($page[1]);
-			if (!$user) {
-				forward('', '404');
-			}
-			$params = news_get_page_content_archive($user->guid, $page[2], $page[3]);
+			$resource_vars['username'] = elgg_extract(1, $page);
+			$resource_vars['lower'] = elgg_extract(2, $page);
+			$resource_vars['upper'] = elgg_extract(3, $page);
+			echo elgg_view_resource('news/archive', $resource_vars);
 			break;
 		case 'view':
-			$params = news_get_page_content_read($page[1]);
+			$resource_vars['guid'] = elgg_extract(1, $page);
+			echo elgg_view_resource('news/view', $resource_vars);
 			break;
 		case 'read': // Elgg 1.7 compatibility
 			register_error(elgg_echo("changebookmark"));
@@ -130,7 +130,8 @@ function news_page_handler($page) {
 			$current_user_guid = elgg_get_logged_in_user_guid();
 			$container = get_entity($page[1]);
 			if (((elgg_instanceof($container, 'group')) && (($current_user_guid == $container->owner_guid) || (check_entity_relationship($current_user_guid, "group_admin", $container->guid)))) || elgg_is_admin_logged_in()) {
-				$params = news_get_page_content_edit($page_type, $page[1]);
+				$resource_vars['guid'] = elgg_extract(1, $page);
+				echo elgg_view_resource('news/add', $resource_vars);
 			} else {
 				forward(REFERER);
 			}
@@ -140,38 +141,28 @@ function news_page_handler($page) {
 			$current_user = elgg_get_logged_in_user_entity();
 			$news = get_entity($page[1]);
 			if (((elgg_instanceof($news, 'object', 'news')) && ($current_user->canEdit())) || elgg_is_admin_logged_in()) {
-				$params = news_get_page_content_edit($page_type, $page[1], $page[2]);
+				$resource_vars['guid'] = elgg_extract(1, $page);
+				$resource_vars['revision'] = elgg_extract(2, $page);
+				echo elgg_view_resource('news/edit', $resource_vars);
 			} else {
 				forward(REFERER);
 			}
 			break;
 		case 'group':
-			$group = get_entity($page[1]);
-			if (!elgg_instanceof($group, 'group')) {
-				forward('', '404');
-			}
-			if (!isset($page[2]) || $page[2] == 'all') {
-				$params = news_get_page_content_list($page[1]);
-			} else {
-				$params = news_get_page_content_archive($page[1], $page[3], $page[4]);
-			}
+			$resource_vars['group_guid'] = elgg_extract(1, $page);
+			$resource_vars['subpage'] = elgg_extract(2, $page);
+			$resource_vars['lower'] = elgg_extract(3, $page);
+			$resource_vars['upper'] = elgg_extract(4, $page);
+			
+			echo elgg_view_resource('news/group', $resource_vars);
 			break;
 		case 'all':
-			$params = news_get_page_content_list();
+			echo elgg_view_resource('news/all', $resource_vars);
 			break;
 		default:
 			return false;
 	}
 
-	if (isset($params['sidebar'])) {
-		$params['sidebar'] .= elgg_view('news/sidebar', array('page' => $page_type));
-	} else {
-		$params['sidebar'] = elgg_view('news/sidebar', array('page' => $page_type));
-	}
-
-	$body = elgg_view_layout('content', $params);
-
-	echo elgg_view_page($params['title'], $body);
 	return true;
 }
 
