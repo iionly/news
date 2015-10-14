@@ -1,0 +1,24 @@
+{
+    "name": "iionly/news",
+    "description": "The news plugin allows admins and group owners to write announcements / news.",
+    "type": "elgg-plugin",
+    "keywords": [
+        "elgg",
+        "plugin"
+    ],
+    "homepage": "https://github.com/iionly/news",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "iionly",
+            "homepage": "https://github.com/iionly",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+            "issues": "https://github.com/iionly/news/issues"
+    },
+    "require": {
+        "composer/installers": ">=1.0.8"
+    }
+}
