@@ -187,16 +187,16 @@ function news_set_url($hook, $type, $url, $params) {
  * Add a menu item to an ownerblock
  */
 function news_owner_block_menu($hook, $type, $return, $params) {
-	if (elgg_instanceof($params['entity'], 'user') && elgg_is_admin_logged_in()) {
-		$url = "news/owner/{$params['entity']->username}";
+	$entity = $params['entity'];
+
+	if (elgg_instanceof($entity, 'user') && $entity->isAdmin()) {
+		$url = "news/owner/{$entity->username}";
 		$item = new ElggMenuItem('news', elgg_echo('news'), $url);
 		$return[] = $item;
-	} else {
-		if (($params['entity']->news_enable != "no") && (((elgg_get_logged_in_user_guid() == $params['entity']->owner_guid) || (check_entity_relationship(elgg_get_logged_in_user_guid(), "group_admin", $params['entity']->guid))) || elgg_is_admin_logged_in)) {
-			$url = "news/group/{$params['entity']->guid}/all";
-			$item = new ElggMenuItem('news', elgg_echo('news:group'), $url);
-			$return[] = $item;
-		}
+	} else if (elgg_instanceof($entity, 'group') && ($entity->news_enable != "no")) {
+		$url = "news/group/{$entity->guid}/all";
+		$item = new ElggMenuItem('news', elgg_echo('news:group'), $url);
+		$return[] = $item;
 	}
 
 	return $return;

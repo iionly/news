@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.1
+-----
+
+- Fixed display of ownerblock news menu entry: display only on admins' profile pages or on group's profile pages. It's no longer taken into account if a non-admin site member is a group owner / group admin regarding the display of the ownerblock menu entry on profile pages. This had resulted in the display of the menu entry not working as intended on profile pages in the first place in the previous versions of the News plugin and additionally it was rather confusing anyway because it wasn't obvious which group(s) the member was owner / group admin of and lastly not all site members would also be members of these groups giving them permission to see these group news. Therefore, group news are only accessible from the corresponding group pages from now on).
+
 2.0.0
 -----
 
