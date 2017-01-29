@@ -8,7 +8,7 @@ define(function(require) {
 	var $ = require('jquery');
 	var elgg = require('elgg');
 
-	function saveDraftCallback(data, textStatus, XHR) {
+	var saveDraftCallback = function(data, textStatus, XHR) {
 		if (textStatus == 'success' && data.success == true) {
 			var form = $('form[id=news-post-edit]');
 
@@ -28,7 +28,7 @@ define(function(require) {
 		}
 	};
 
-	function saveDraft() {
+	var saveDraft = function() {
 		if (typeof(tinyMCE) != 'undefined') {
 			tinyMCE.triggerSave();
 		}
@@ -55,14 +55,14 @@ define(function(require) {
 		$.post(draftURL, postData, saveDraftCallback, 'json');
 	};
 
-	function init() {
+	var init = function() {
 		// get a copy of the body to compare for auto save
 		oldDescription = $('form[id=news-post-edit]').find('textarea[name=description]').val();
 
 		setInterval(saveDraft, 60000);
 	};
 
-	init();
+	elgg.register_hook_handler('init', 'system', init);
 
 	return {
 		saveDraft: saveDraft

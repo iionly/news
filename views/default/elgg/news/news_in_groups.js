@@ -9,7 +9,7 @@ define(function(require) {
 	var $ = require('jquery');
 	var elgg = require('elgg');
 
-	function init() {
+	var init = function() {
 		$(".widget_news_in_groups_navigator > span:first").each(function(index, elem) {
 			news_in_groups_rotate_content(elem);
 		});
@@ -22,7 +22,7 @@ define(function(require) {
 		setInterval(news_in_groups_rotate, 10 * 1000);
 	};
 
-	function news_in_groups_rotate() {
+	var news_in_groups_rotate = function() {
 		$(".widget_news_in_groups_navigator").each(function(index, elem) {
 
 			if ($(this).find(".active").next().length === 0) {
@@ -33,7 +33,7 @@ define(function(require) {
 		});
 	}
 
-	function news_in_groups_rotate_content(elem) {
+	var news_in_groups_rotate_content = function(elem) {
 		$(elem).parent().find("span.active").removeClass("active");
 		$(elem).addClass("active");
 
@@ -42,5 +42,5 @@ define(function(require) {
 		$(elem).parent().parent().find("." + active).show();
 	}
 
-	init();
+	elgg.register_hook_handler('init', 'system', init);
 });

@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.3.1
+-----
+
+- Minimum required Elgg version is now 2.3.0,
+- Updated to correspond to the code of the bundled Blog plugin (=the foundation of News plugin) of Elgg 2.3.0,
+- Populate 'entity' attribute on calling object/elements/full view,
+- No longer use deprecated elgg_delete_river(),
+- No longer use deprecated can_write_to_container().
+
 2.0.1
 -----
 

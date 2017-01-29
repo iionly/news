@@ -6,7 +6,7 @@
  *
  */
 
-elgg_require_js('news/news_in_groups');
+elgg_require_js('elgg/news/news_in_groups');
 
 $widget = $vars["entity"];
 

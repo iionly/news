@@ -129,7 +129,7 @@ function news_page_handler($page) {
 			elgg_gatekeeper();
 			$current_user_guid = elgg_get_logged_in_user_guid();
 			$container = get_entity($page[1]);
-			if (((elgg_instanceof($container, 'group')) && (($current_user_guid == $container->owner_guid) || (check_entity_relationship($current_user_guid, "group_admin", $container->guid)))) || elgg_is_admin_logged_in()) {
+			if (elgg_is_admin_logged_in() || ((elgg_instanceof($container, 'group')) && ($container->canEdit() || (check_entity_relationship($current_user_guid, "group_admin", $container->guid))))) {
 				$resource_vars['guid'] = elgg_extract(1, $page);
 				echo elgg_view_resource('news/add', $resource_vars);
 			} else {
@@ -140,7 +140,7 @@ function news_page_handler($page) {
 			elgg_gatekeeper();
 			$current_user = elgg_get_logged_in_user_entity();
 			$news = get_entity($page[1]);
-			if (((elgg_instanceof($news, 'object', 'news')) && ($current_user->canEdit())) || elgg_is_admin_logged_in()) {
+			if (elgg_is_admin_logged_in() || ((elgg_instanceof($news, 'object', 'news')) && ($current_user->canEdit()))) {
 				$resource_vars['guid'] = elgg_extract(1, $page);
 				$resource_vars['revision'] = elgg_extract(2, $page);
 				echo elgg_view_resource('news/edit', $resource_vars);
@@ -187,16 +187,13 @@ function news_set_url($hook, $type, $url, $params) {
  * Add a menu item to an ownerblock
  */
 function news_owner_block_menu($hook, $type, $return, $params) {
-	$entity = $params['entity'];
-
-	if (elgg_instanceof($entity, 'user') && $entity->isAdmin()) {
+	$entity = elgg_extract('entity', $params);
+	if (($entity instanceof ElggUser) && $entity->isAdmin()) {
 		$url = "news/owner/{$entity->username}";
-		$item = new ElggMenuItem('news', elgg_echo('news'), $url);
-		$return[] = $item;
-	} else if (elgg_instanceof($entity, 'group') && ($entity->news_enable != "no")) {
+		$return[] = new ElggMenuItem('news', elgg_echo('news'), $url);
+	} elseif (($entity instanceof ElggGroup) && ($entity->news_enable != "no")) {
 		$url = "news/group/{$entity->guid}/all";
-		$item = new ElggMenuItem('news', elgg_echo('news:group'), $url);
-		$return[] = $item;
+		$return[] = new ElggMenuItem('news', elgg_echo('news:group'), $url);
 	}
 
 	return $return;

@@ -91,7 +91,8 @@ foreach ($values as $name => $default) {
 		case 'container_guid':
 			// this can't be empty or saving the base entity fails
 			if (!empty($value)) {
-				if (can_write_to_container($user->getGUID(), $value)) {
+				$container = get_entity($value);
+				if ($container && $container->canWriteToContainer(0, 'object', 'news')) {
 					$values[$name] = $value;
 				} else {
 					$error = elgg_echo("news:error:cannot_write_to_container");
@@ -156,7 +157,7 @@ if (!$error) {
 				'object_guid' => $news->getGUID(),
 			));
 
-			elgg_trigger_event('publish', 'news', $news);
+			elgg_trigger_event('publish', 'object', $news);
 
 			// reset the creation time for news posts that move from draft to published
 			if ($guid) {
@@ -164,10 +165,21 @@ if (!$error) {
 				$news->save();
 			}
 		} elseif ($old_status == 'published' && $status == 'draft') {
-			elgg_delete_river(array(
+			$access = elgg_set_ignore_access(true);
+			$access_status = access_get_show_hidden_status();
+			access_show_hidden_entities(true);
+
+			$river_items = new ElggBatch('elgg_get_river', array(
 				'object_guid' => $news->guid,
 				'action_type' => 'create',
+				'limit' => false,
 			));
+			$river_items->setIncrementOffset(false);
+			foreach ($river_items as $river_item) {
+				$river_item->delete();
+			}
+			access_show_hidden_entities($access_status);
+			elgg_set_ignore_access($access);
 		}
 
 		if ($news->status == 'published' || $save == false) {

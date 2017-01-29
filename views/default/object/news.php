@@ -77,6 +77,7 @@ if ($full) {
 	$summary = elgg_view('object/elements/summary', $params);
 
 	echo elgg_view('object/elements/full', array(
+		'entity' => $news,
 		'summary' => $summary,
 		'icon' => $owner_icon,
 		'body' => $body,
@@ -90,9 +91,8 @@ if ($full) {
 		'metadata' => $metadata,
 		'subtitle' => $subtitle,
 		'content' => $excerpt,
+		'icon' => $owner_icon,
 	);
 	$params = $params + $vars;
-	$list_body = elgg_view('object/elements/summary', $params);
-
-	echo elgg_view_image_block($owner_icon, $list_body);
+	echo elgg_view('object/elements/summary', $params);
 }

@@ -60,8 +60,8 @@ function news_get_page_content_list($container_guid = null) {
 		elgg_push_breadcrumb(elgg_echo('news:news'));
 	}
 
-	if (elgg_is_admin_logged_in() || ($container_guid && (elgg_instanceof($container, 'group')) && (($container->owner_guid == $current_user->guid) || (check_entity_relationship($current_user->guid, "group_admin", $container->guid))))) {
-		elgg_register_title_button();
+	if (elgg_is_admin_logged_in() || ($container_guid && (elgg_instanceof($container, 'group')) && ($container->canEdit() || (check_entity_relationship($current_user->guid, "group_admin", $container->guid))))) {
+		elgg_register_title_button('news', 'add', 'object', 'news');
 	}
 
 	$return['content'] = elgg_list_entities($options);
@@ -143,7 +143,7 @@ function news_get_page_content_archive($owner_guid, $lower = 0, $upper = 0) {
  */
 function news_get_page_content_edit($page, $guid = 0, $revision = null) {
 
-	elgg_require_js('news/save_draft');
+	elgg_require_js('elgg/news/save_draft');
 
 	$return = array(
 		'filter' => '',
@@ -182,7 +182,7 @@ function news_get_page_content_edit($page, $guid = 0, $revision = null) {
 			elgg_push_breadcrumb($news->title, $news->getURL());
 			elgg_push_breadcrumb(elgg_echo('edit'));
 
-			elgg_require_js('news/save_draft');
+			elgg_require_js('elgg/news/save_draft');
 
 			$content = elgg_view_form('news/save', $vars, $body_vars);
 			$sidebar = elgg_view('news/sidebar/revisions', $vars);
